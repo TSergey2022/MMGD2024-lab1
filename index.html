@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Collision</title>
+	<meta charset="UTF-8" />
+  <style>
+    * { margin:0; padding:0; }
+    html, body { width:100%; height:100%; }
+    body { display: flex; flex-direction: column; align-items: center; }
+    #buttons { margin: 20px 0; display: flex; flex-direction: row; gap: 10px; }
+    button { padding: 5px 10px; }
+    #counter { padding: 5px 10px; border: 1px solid gray; }
+    canvas { display:block; border: 1px solid black; }
+  </style>
+</head>
+
+<body>
+  <div id="buttons">
+    <button id="fastrestart">[1] Fast Restart</button>
+    <button id="restart">[2] Restart</button>
+    <button id="stop">[3] Stop</button>
+    <button id="continue">[4] Continue</button>
+    <button id="step">[5] Step</button>
+    <div id="counter">0</div>
+  </div>
+	<canvas width="640" height="480" id="cnvs"></canvas>
+	<script src="./src/index.ts"></script>
+</body>
+</html>
