@@ -1,9 +1,10 @@
 /* istanbul ignore file */
 
+import AABB from "./aabb";
 import Game from "./game";
-import { makeCircleOfColliders } from "./utils";
-import Vector2 from "./vector2";
+import { makeRandom } from "./utils";
 
+const countElem = document.getElementById("cnt") as HTMLInputElement;
 const canvas = document.getElementById("cnvs") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
@@ -11,7 +12,11 @@ let game: Game; setup();
 
 function setup() {
   game = new Game(ctx, 15);
-  makeCircleOfColliders(game, new Vector2(canvas.clientWidth / 2, canvas.clientHeight / 2), 200, 30);
+  const colliders = makeRandom(
+    Number.parseInt(countElem.value),
+    new AABB(0, canvas.clientWidth, 0, canvas.clientHeight)
+  );
+  colliders.forEach(obj => game.insert(obj));
   game.draw(game.ctx);
 }
 
@@ -39,11 +44,11 @@ function stepGame() {
 
 function keyPressed(event) {
   const dict = {
-    "1": fastRestartGame,
-    "2": restartGame,
-    "3": stopGame,
-    "4": continueGame,
-    "5": stepGame
+    "q": fastRestartGame,
+    "w": restartGame,
+    "e": stopGame,
+    "r": continueGame,
+    "t": stepGame
   }
   const key = event.key as string;
   for (const propKey in dict) if (key === propKey) dict[propKey].call();

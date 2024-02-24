@@ -1,7 +1,7 @@
 import Vector2 from "./vector2";
 import { Circle, Triangle, Hexagon } from "./shape";
 import Collider from "./collider";
-import Game from "./game";
+import AABB from "./aabb";
 
 function distToSegmentSquared(p: Vector2, v: Vector2, w: Vector2): number {
   var l2 = Vector2.distanceSquared(v, w);
@@ -29,16 +29,34 @@ function getRandomAngle(): number {
 }
 
 /* istanbul ignore next */
-export function makeCircleOfColliders(game: Game, c: Vector2, r: number, count: number) {
-  const size = 20;
+export function makeCircleOfColliders(c: Vector2, r: number, count: number): Collider[] {
+  const rez = [];
+  const size = 5;
   const angleDelta = (2 * Math.PI) / count;
   for (let i = 0; i < count; i++) {
     const angle = i * angleDelta;
     const pos = new Vector2(c.x + r * Math.cos(angle), c.y + r * Math.sin(angle))
     const velocity = getRandomNormalizedVector().mul1_(Math.random() * 4);
     
-    if (i % 3 == 0) game.gameObjects.push(new Collider(new Circle(pos, size / 2), velocity, 3));
-    else if (i % 3 == 1) game.gameObjects.push(new Collider(Triangle.fromCenterLengthAngle(pos, size, getRandomAngle()), velocity, 3));
-    else if (i % 3 == 2) game.gameObjects.push(new Collider(Hexagon.fromCenterLengthAngle(pos, size / 2, getRandomAngle()), velocity, 3));
+    if (i % 3 == 0) rez.push(new Collider(new Circle(pos, size / 2), velocity, 3));
+    else if (i % 3 == 1) rez.push(new Collider(Triangle.fromCenterLengthAngle(pos, size, getRandomAngle()), velocity, 3));
+    else if (i % 3 == 2) rez.push(new Collider(Hexagon.fromCenterLengthAngle(pos, size / 2, getRandomAngle()), velocity, 3));
   }
+  return rez;
+}
+
+/* istanbul ignore next */
+export function makeRandom(count: number, aabb: AABB): Collider[] {
+  const size = 5;
+  const rez = [];
+  for (let i = 0; i < count; i++) {
+    const x = Math.random() * (aabb.maxX - aabb.minX) + aabb.minX;
+    const y = Math.random() * (aabb.maxY - aabb.minY) + aabb.minY;
+    const pos = new Vector2(x, y);
+    const velocity = getRandomNormalizedVector().mul1_(Math.random() * 2);
+    if (i % 3 == 0) rez.push(new Collider(new Circle(pos, size / 2), velocity, 3));
+    else if (i % 3 == 1) rez.push(new Collider(Triangle.fromCenterLengthAngle(pos, size, getRandomAngle()), velocity, 3));
+    else if (i % 3 == 2) rez.push(new Collider(Hexagon.fromCenterLengthAngle(pos, size / 2, getRandomAngle()), velocity, 3));
+  }
+  return rez;
 }

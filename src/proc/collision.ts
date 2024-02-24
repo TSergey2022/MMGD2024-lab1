@@ -130,8 +130,8 @@ export function intersectShapeShape(shape1: Shape, shape2: Shape): boolean {
   return TABLE1[shape1.type][shape2.type](shape1 as any, shape2 as any);
 }
 
-export function detectCollisions(colliders: Array<Collider>): Array<[Collider, Collider]> {
-  const pairs = new Array<[Collider, Collider]>();
+export function detectCollisions(colliders: Collider[]): [Collider, Collider][] {
+  const pairs: [Collider, Collider][] = [];
 
   for (let i = 0; i < colliders.length; i++) {
     const obj1 = colliders[i];
@@ -139,6 +139,19 @@ export function detectCollisions(colliders: Array<Collider>): Array<[Collider, C
       const obj2 = colliders[j];
       if (intersectShapeShape(obj1.s, obj2.s)) {
         pairs.push([obj1, obj2]);
+      }
+    }
+  }
+
+  for (let i = 1; i <= pairs.length; i++) {
+    const pair1 = pairs[pairs.length - i];
+    for (let j = i + 1; j <= pairs.length; j++) {
+      const pair2 = pairs[pairs.length - j];
+      if ((pair1[0] === pair2[0]) && (pair1[1] === pair2[1])) {
+        pairs.splice(pairs.length - i, 1); break;
+      }
+      if ((pair1[0] === pair2[1]) && (pair1[1] === pair2[0])) {
+        pairs.splice(pairs.length - i, 1); break;
       }
     }
   }

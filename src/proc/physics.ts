@@ -25,7 +25,6 @@ export function moveShape(s: Shape, v: Vector2) {
   if (s.type === "circle") moveCircle(s as Circle, v);
   else if (s.type === "tri") moveTriangle(s as Triangle, v);
   else if (s.type === "hex") moveHexagon(s as Hexagon, v);
-  else throw new Error("moveShape out of range");
 }
 
 export function moveCollider(c: Collider) {

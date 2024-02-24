@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import AABB from "../aabb";
 export type ShapeType = "circle" | "tri" | "hex";
 

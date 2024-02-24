@@ -61,7 +61,7 @@ describe("Circle Triangle", () => {
   });
   it('Circle intersect Triangle, 2 points', () => {
     const circle = new Circle(new Vector2(0, -2), 1.1);
-    const triangle = Triangle.fromVertex(new Vector2(0, 1), new Vector2(-1, -1), new Vector2(1, -1));
+    const triangle = Triangle.fromVertex(new Vector2(-1, -1), new Vector2(0, 1), new Vector2(1, -1));
     expect(intersectCircleTriangle(circle, triangle)).toBeTruthy();
   });
   it('Circle intersect Triangle, 2 points 1 vertex', () => {

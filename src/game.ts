@@ -6,6 +6,7 @@ import { drawCollider } from "./proc/draw";
 import { applyGeneralElasticCollision, moveCollider, moveShape } from "./proc/physics";
 import { detectCollisions, detectEdgeCollisions } from "./proc/collision";
 import AABB from "./aabb";
+import QuadTree from "./quad_tree";
 
 export default class Game {
 
@@ -17,6 +18,7 @@ export default class Game {
   tickLength: number;
   tickCount: number;
   stopCycle: number;
+  tree: QuadTree;
 
   paused: boolean;
 
@@ -28,7 +30,12 @@ export default class Game {
     this.tickLength = tickLength;
     this.tickCount = 0;
     this.stopCycle = 0;
+    this.tree = new QuadTree(new AABB(0, ctx.canvas.clientWidth, 0, ctx.canvas.clientHeight));
     this.paused = true;
+  }
+
+  insert(collider: Collider) {
+    this.gameObjects.push(collider);
   }
 
   continue() {
@@ -70,9 +77,12 @@ export default class Game {
   physicsStep() {
     {
       const markForDelete = new Set<Collider>();
-
+      const tree = this.tree;
+      tree.clear();
+      this.gameObjects.forEach(obj => tree.insert(obj));
       this.gameObjects.forEach(obj => obj.c = false);
-      const pairs = detectCollisions(this.gameObjects);
+      const pairs = tree.getAllCollidingPairs();
+      // const pairs = detectCollisions(this.gameObjects);
       pairs.forEach(pair => applyGeneralElasticCollision(...pair));
       pairs.forEach(pair => pair.forEach(obj => {
         obj.c = true;

@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import Vector2 from "../vector2";
 import Shape from ".";
 import AABB from "../aabb";
